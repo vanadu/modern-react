@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Data from './Participants';
 
-// !VA Create a Participants component with just the id, first name, gender designation and email addy from the JSON data as a shortlist for instructors to use on the first day of class.  
+const obj = JSON.parse('{"id":1,"first_name":"Zedekiah","last_name":"Thaim","email":"zthaim0@webs.com","gender":"Polygender","ip_address":"222.32.218.83"}');
+
+console.log('obj :>> ');
+console.log(obj);
+
 
 class App extends React.Component {
   render() {
     return (
-      <div className="ui header large">
-         What's the first name and gender of our participants?
-         <Data/>
+      <div className="content">
+         I am a class-based component.
       </div>
     );
   }
