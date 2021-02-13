@@ -4,6 +4,7 @@ import React from 'react';
 // !VA 098 Refactor the import to refer to the unsplash.js file
 import unsplash from '../api/unsplash';
 import SearchBar from './SearchBar';
+import ImageList from './ImageList';
 
 // !VA 091 Refactor this into a class based component
 // const App = () => {
@@ -58,7 +59,7 @@ class App extends React.Component {
     return (
       <div className="ui container" style={{marginTop:'10px'}}>
       <SearchBar onSubmit={this.onSearchSubmit}/>
-      Found: {this.state.images.length} images
+      <ImageList images={this.state.images} />
     </div> 
     );
   }

@@ -34,19 +34,17 @@ class SearchBar extends React.Component {
       // !VA 087 Now we have to disable the default form behavior and trap the enter key, so that when the user presses enter, our custom logic is executed. So create a this.onSubmit callback in the form element.  Then create the onFormSubmit handler in the body of the component and call the event object. Then in the body of the function we include the event.preventDefault to prevent the default action, which is form submission, from executing. 
       // !VA 089 Another way to fix the error message from hell with this is as below. Call onFormSubmit from within the on submit callback using an arrow function. 
       // !VA <form onSubmit={event => this.onFormSubmit(event)}className="ui form">
-      <div>
-        <div className="ui segment">
-        <form onSubmit={this.onFormSubmit} className="ui form">
-            <div className="field">
-              <label>Image Search</label>
-              <input 
-                type="text" 
-                value={this.state.term}
-                onChange={(e) => this.setState({ term: e.target.value})}
-              />
-            </div>
-          </form>
-        </div>
+      <div className="ui segment">
+      <form onSubmit={this.onFormSubmit} className="ui form">
+          <div className="field">
+            <label>Image Search</label>
+            <input 
+              type="text" 
+              value={this.state.term}
+              onChange={(e) => this.setState({ term: e.target.value})}
+            />
+          </div>
+        </form>
       </div>
     );
   }
