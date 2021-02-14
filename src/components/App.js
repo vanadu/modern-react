@@ -1,70 +1,70 @@
 import React from 'react';
-// !VA import axios above the custom components as per convention
-// import axios from 'axios';
-// !VA 098 Refactor the import to refer to the unsplash.js file
-import unsplash from '../api/unsplash';
-import SearchBar from './SearchBar';
-import ImageList from './ImageList';
-
-// !VA 091 Refactor this into a class based component
-// const App = () => {
-//   return (
-//     <div className="ui container" style={{marginTop:'10px'}}>
-//       <SearchBar />
-//     </div>
-//   );
-// };
-
+import SearchBar from './SearchBar.js';
+// !VA import the youtube api call
+import youtube from '../apis/youtube';
+import VideoList from './VideoList';
+import VideoDetail from './VideoDetail';
 
 class App extends React.Component {
-  // !VA 091 Now we implement the search function by creating the onSearchSubmit function. It takes the term parameter, which is the search term captured by the onFormSubmit function.  
 
-  // !VA 096 Set state on the images property on state object. Assuming the images property will contain an array, we initialize it as an array.
-  state = { images: [] };
+  // !VA Now set the list of videos as state. Create a property and init it as empty array
+  // !VA 130 Add property for the selected video to be displayed from VideoDetail
+  state = {videos: [], selectedVideo: null };
+  
+  // !VA 135 Now we set the default video to play when the page loads. Call the function that initiates all the search logic and pass in a default search term, i.e. buildings
+  componentDidMount() {
+    this.onTermSubmit('buildings')
+  }
 
-    // !VA 095 Refactor using async and await 
-    // !VA 097 Remember that we have to bind 'this' to the correct context. To do that, we make onSearchSubmit an arrow function.  
-     onSearchSubmit = async (term) => {
-       // !VA 098 Refactored this, see below
-      // const response = await axios 
-      // !VA 098 Reference unsplash.js
-        const response = await unsplash.get('/search/photos', {
-        // !VA Moved the root URL to the baseURL function in unsplash.js
-        // .get('https://api.unsplash.com/search/photos', {
-        // !VA Moved the 'get' to unsplash.js
-        // .get('/search/photos', {
-          params: { query: term }
-          // !VA 098 Moved this into the axios.create function in unsplash.js 
-          // headers: {
-          //   Authorization: 'Client-ID INpm-yRfMK8IJIeKJP08_wsN9eupEwhiMZwzHlzGVoU' 
-          // }
-        });
-      // !VA 096 Call setState and set it to the images property defined above,  causing the component to rerender
-        this.setState({ images: response.data.results })
-    // !VA 094 Make the API call. The call returns a Promise which we handle here using a 'then'.
-    // onSearchSubmit(term) {
-    // axios.get('https://api.unsplash.com/search/photos', {
-    //   params: { query: term },
-    //   headers: {
-    //     Authorization: 'Client-ID INpm-yRfMK8IJIeKJP08_wsN9eupEwhiMZwzHlzGVoU' 
-    //   }
-    // }).then((response) => {
-    //   console.log(response.data.results);
-    // });
-  }  
+  // !VA This is where the search callback is added that is called whenever the form is submitted. Term is the search term. The youtube call is documented in 119.
+  // !VA 124 Async/await.   
+  onTermSubmit  = async (term) => {
+    const response = await youtube.get('/search', {
+      params: {
+        q: term
+      }
+    }); 
+    // !VA Works
+    // console.log(response);
+    // !VA set state to response.data.items
+    // !VA 135 To get rid of th loading message if the video displays immediately, preset the selectedVideo property of state to the first item in the array.
+    this.setState({ 
+      videos: response.data.items,
+      selectedVideo: response.data.items[0]
+    });
+  }
 
-  // !VA 091 Below, we pass the term argument down to the SearchBar by calling onSearchSubmit in the onSubmit prop of the SearchBar element. NOTE: onSubmit is not a protected, native property, unlike onChange and onFormSubmit
-  // !VA 096 Now, print out the state as defined above. state contains the array of images. We just want the length, so get the length property of the returned array.
-  render() { 
+  // !VA 130 Callback for the selected video detail. This has to be set on the state so that the component rerenders.
+  // !VA 131 Here we update our state on the app class
+  onVideoSelect = (video) => {
+    // console.log('From the app :>> ' + video);
+     this.setState({ selectedVideo: video });
+  
+  }
+
+
+  render() {  
+    // !VA Below, the callback above is added as a prop. Remember, whenever we create a user i.e. custom prop or callback name, we can use any name.  
+    // !VA 125 This is where the video list is displayed. To do that, we need a prop called videos which calls the videos in state, which were put there in onTermSubmit. This prop 'videos' is pushed down into the VideoList component. In other words, the videos in the App component's state are passed down to the child component VideoList's props so they can be displayed in the App component. I had it there for a minute... 
+    // !VA 130 onVideoSelect calls the callback that sets the video array to state
+    // !VA 131 The video prop in VideoDetail passes the selected video from state down to the VideoDetail component, which is then rerendered here. 
+    // !VA 134 Style the video panes side-by-side
     return (
-      <div className="ui container" style={{marginTop:'10px'}}>
-      <SearchBar onSubmit={this.onSearchSubmit}/>
-      <ImageList images={this.state.images} />
-    </div> 
+      <div className="ui container">
+        <SearchBar onFormSubmit={this.onTermSubmit} />
+        <div className="ui grid">
+          <div className="ui row">
+            <div className="eleven wide column">
+              <VideoDetail video={ this.state.selectedVideo } />
+            </div>
+            <div className="five wide column">
+              <VideoList onVideoSelect={ this.onVideoSelect }videos={this.state.videos} />
+            </div>
+          </div>
+        </div>
+      </div> 
     );
   }
 }
-
-
 
 export default App;
