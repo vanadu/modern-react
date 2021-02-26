@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Button from './Practice';
+import Button from './Button';
 
 
 class App extends Component {
