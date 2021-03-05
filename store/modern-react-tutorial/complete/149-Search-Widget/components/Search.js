@@ -6,7 +6,7 @@ import axios from 'axios';
 const Search = () => {
   // !VA 157 Include a useState value to use as a default search term, see below.
   // const [term, setTerm] = useState('programming');
-  // !VA 162 Restoring htis to an empty string for tyis lesson
+  // !VA 162 Restoring this to an empty string for this lesson
   const [term, setTerm] = useState('');
     // !VA 157 
   const [results, setResults] = useState(['']);
