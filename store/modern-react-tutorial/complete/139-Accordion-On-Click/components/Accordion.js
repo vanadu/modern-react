@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
  
+// !VA items is the prop array passed from App
 const Accordion = ({items}) => {
   // !VA 142 initialize state using the useState hook. Gives access to the state system in a functional component. Uses array destructuring, similar to object destructuring. 
   const [ activeIndex, setActiveIndex ] = useState(null);
@@ -19,7 +20,7 @@ const Accordion = ({items}) => {
     // 145 !VA If the index value equals the activeIndex state, set the active variable to the string 'active' and open the accordion, otherwise set it to null and do nothing. This is a ternary expression that returns a bool.
     const active = index === activeIndex ? 'active' : '';
  
-    // !VA I often see empty divs instead of React.Fragments. Can empty divs have props?
+    // !VA I often see empty divs instead of React.Fragments. 
      return <React.Fragment key={item.title}>
        <div 
        // !VA 145 Set the class name to the return of the ternary expression above.
@@ -43,3 +44,4 @@ const Accordion = ({items}) => {
 };
 
 export default Accordion;
+
