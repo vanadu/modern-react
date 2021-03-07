@@ -1,7 +1,7 @@
 // !VA 237 Required import for combineReducers
 import { combineReducers } from 'redux';
 
-// !VA 236 Returns a static list of songs. This is a static data set so there's really no use in using a reducer for it, but we're doing it here for demo purposes.
+// !VA 236 Returns a static list of songs. This is a static data set so there's really no use in using a reducer for it, but we're doing it here for demo purposes. Normally we would just import this data in a separate JS import.
 const songsReducer = () => {
   return [
     { title: 'No Scrubs', duration: '4:05' },

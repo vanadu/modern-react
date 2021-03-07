@@ -1,0 +1,88 @@
+<!-- VA! Note that this index.html file runs without anything in the src folder EXCEPT an EMPTY index.js file. Grider neglects to tell us this, though.  -->
+<script type="text/babel" data-plugins="proposal-class-properties" data-presets="env,react">
+  // !VA Use this file to work with React without creating the whole src folder inside of a project! This could help with managing all those src files and folders. Also note this file dispenses with all those pesky imports. I guess the imports are implicit when you use the CDN libraries.
+
+  // Action Creators - You don't need to change these
+  const increment = () => ({ type: 'increment' });
+  const decrement = () => ({ type: 'decrement' });
+
+  // !VA Step 3: Receive the props object, which was exposed below in mapStateToProps
+  // !VA Step 4: Render the props.count property out to JSX
+  // !VA Step 6: Now that the increment and decrement functions have been exposed in the Connect function we can call them with onClick event handlers without parentheses (because you don't want it called when the component is initially rendered)
+  // !VA NOTE: My mistake, writing onCLick instead of onClick. I didn't see it, and it failed silently.
+  const Counter = (props) => {
+    return (
+      <div>
+        <button onClick={props.increment} className="increment">Increment</button>
+        <button onClick={props.decrement} className="decrement">Decrement</button>
+                Current Count: <span>{props.count}</span>
+      </div>
+    );
+  };
+
+  /* !VA  ]
+  To get this to work we need to create the interface between React and Redux so they can communicate with each other.
+  */
+  // !VA Step 1: First we need to do is get some state out of our redux store that is defined below here and show some state or show some property inside of our counter component. So to do so I'm going to define a mapStateToProps function. The count variable and its behavior is defined there, so all we are doing here is exposing it to the component for use as props. To do this, we're creating an object called count and assigning it the count property from state. By returning that to the component, the the count object now becomes available to the component as props.
+  const mapStateToProps = (state) => {
+    return { count: state.count }
+  }
+
+  // !VA Step 2: Pass the mapStateToProps function as the first argument to the RR Connect function.
+  // !VA Step 5: Pass the action creators defined above in the second argument of the connect function as an object.
+  const WrappedCounter = ReactRedux.connect(mapStateToProps, {
+    // increment: increment,
+    // decrement: decrement
+    // !VA And don't forget that if the object key and value are identical, in ES6 we can reduce them a single value
+    increment,
+    decrement
+  })(Counter);
+
+
+
+
+  // Only change code *before* me!
+  // -----------
+
+  const store = Redux.createStore(Redux.combineReducers({
+    // !VA Step 5: To test up to step 4, Confirm that we're getting data from the Redux store by changing count here.  
+    // count: (count = 10, action) => {
+    count: (count = 0, action) => {
+      if (action.type === 'increment') {
+        return count + 1;
+      } else if (action.type === 'decrement') {
+        return count - 1;
+      } else {
+        return count;
+      }
+    }
+  }));
+
+  ReactDOM.render(
+    <ReactRedux.Provider store={store}>
+      <WrappedCounter />
+    </ReactRedux.Provider>,
+    document.querySelector('#root')
+  );
+</script>
+
+
+
+
+
+
+<!--The App component above will be rendered into this-->
+<div id="root"></div>
+
+
+<!--No need to change anything after this line!-->
+<!--No need to change anything after this line!-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/@babel/preset-env-standalone@7/babel-preset-env.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/redux@4.0.1/dist/redux.js"></script>
+<script src="https://unpkg.com/react-redux@5.0.6/dist/react-redux.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
